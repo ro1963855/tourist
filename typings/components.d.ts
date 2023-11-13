@@ -7,6 +7,10 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    GoogleMap: typeof import('./../src/components/GoogleMap.vue')['default']
     HelloWorld: typeof import('./../src/components/HelloWorld.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }
