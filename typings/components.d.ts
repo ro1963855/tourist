@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     GoogleMap: typeof import('./../src/components/GoogleMap.vue')['default']
     HelloWorld: typeof import('./../src/components/HelloWorld.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

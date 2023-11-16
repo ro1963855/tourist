@@ -1,16 +1,8 @@
-<script setup lang="ts">
-import GoogleMap from '@/components/GoogleMap.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="layout">
-    <Suspense>
-      <GoogleMap class="min-w-full min-h-full"></GoogleMap>
-
-      <template #fallback>
-        <div class="w-full h-full" v-loading="true"></div>
-      </template>
-    </Suspense>
+    <RouterView />
   </div>
 </template>
 
