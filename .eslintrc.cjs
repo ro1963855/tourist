@@ -27,5 +27,5 @@ module.exports = {
     'tsconfig.node.json',
     'uno.config.ts',
     'vite.config.ts'
-  ]
+  ],
 }
