@@ -2,10 +2,7 @@ import { defineConfig } from 'vite'
 
 import { URL, fileURLToPath } from 'node:url';
 
-// https://element-plus.org/en-US/guide/quickstart.html#on-demand-import
-import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-vue-components/vite';
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+import ElementPlus from 'unplugin-element-plus/vite'
 
 // https://unocss.dev/integrations/vite
 import UnoCSS from 'unocss/vite'
@@ -20,16 +17,7 @@ export default defineConfig({
     vue(),
     eslintPlugin({ cache: false }),
     UnoCSS(),
-    AutoImport({
-      resolvers: [ElementPlusResolver()],
-      dts: './typings/auto-imports.d.ts',
-    }),
-    Components({
-      resolvers: [ElementPlusResolver({
-        importStyle: 'sass',
-      })],
-      dts: './typings/components.d.ts',
-    }),
+    ElementPlus({})
   ],
   resolve: {
     alias: {

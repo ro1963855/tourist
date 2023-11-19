@@ -1,35 +1,21 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import type { Marker } from '@/apis/marker'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { isNil } from 'lodash-es'
-import { Loader } from '@googlemaps/js-api-loader'
 import { getMarkers } from '@/apis/marker'
+import { getMapsApi, getMarkerApiApi } from '@/stores/useGoogleMapApi'
 
 const mapEl: Ref<HTMLElement | null> = ref(null)
 
-const loader = new Loader({
-  apiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
-  version: 'weekly',
-  libraries: ['places'],
-  language: 'zh-TW'
-})
+const mapApi = await getMapsApi()
+const markerApi = await getMarkerApiApi()
 
-const mapApi = await loader.importLibrary('maps')
-const markerApi = await loader.importLibrary('marker')
-let map: google.maps.Map | null = null
+const props = defineProps<{
+  map: google.maps.Map | null
+}>()
 
-const addMarker = (marker: Marker) => {
-  if (isNil(map)) {
-    console.error('map should not null')
-    return
-  }
-
-  const mapMarker = new markerApi.Marker({
-    position: { lat: marker.lat, lng: marker.lng }
-  })
-  mapMarker.setMap(map)
-}
+const emit = defineEmits<{(e: 'update:map', map: google.maps.Map): void}>()
 
 const initMap = async () => {
   if (isNil(mapEl.value)) {
@@ -42,14 +28,35 @@ const initMap = async () => {
       lat: 25.0425,
       lng: 121.5468
     },
-    zoom: 11
+    zoom: 11,
+    mapTypeId: mapApi.MapTypeId.ROADMAP,
+    streetViewControl: false,
+    mapTypeControl: false,
+    fullscreenControl: false
   }
 
   try {
-    map = new mapApi.Map(mapEl.value, mapOptions)
+    const map = new mapApi.Map(mapEl.value, mapOptions)
+    emit('update:map', map)
   } catch (e) {
     console.error(e)
   }
+}
+
+onMounted(async () => {
+  await initMap()
+})
+
+const addMarker = (marker: Marker) => {
+  if (isNil(props.map)) {
+    console.error('map should not null')
+    return
+  }
+
+  const mapMarker = new markerApi.Marker({
+    position: { lat: marker.lat, lng: marker.lng }
+  })
+  mapMarker.setMap(props.map)
 }
 
 const fetchMarkers = async () => {
@@ -60,8 +67,8 @@ const fetchMarkers = async () => {
   })
 }
 
-onMounted(async () => {
-  await initMap()
+watch(() => props.map, async () => {
+  if (isNil(props.map)) { return }
   await fetchMarkers()
 })
 </script>

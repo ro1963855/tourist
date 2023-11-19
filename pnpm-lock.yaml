@@ -28,6 +28,9 @@ dependencies:
     version: 4.2.5(vue@3.3.4)
 
 devDependencies:
+  '@iconify/vue':
+    specifier: ^4.1.1
+    version: 4.1.1(vue@3.3.4)
   '@types/google.maps':
     specifier: ^3.54.7
     version: 3.54.7
@@ -94,6 +97,9 @@ devDependencies:
   unplugin-auto-import:
     specifier: ^0.16.7
     version: 0.16.7
+  unplugin-element-plus:
+    specifier: ^0.8.0
+    version: 0.8.0
   unplugin-vue-components:
     specifier: ^0.25.2
     version: 0.25.2(vue@3.3.4)
@@ -513,6 +519,15 @@ packages:
       local-pkg: 0.4.3
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@iconify/vue@4.1.1(vue@3.3.4):
+    resolution: {integrity: sha512-RL85Bm/DAe8y6rT6pux7D2FJSiUEM/TPfyK7GrbAOfTSwrhvwJW+S5yijdGcmtXouA8MtuH9C7l4hiSE4mLMjg==}
+    peerDependencies:
+      vue: '>=3'
+    dependencies:
+      '@iconify/types': 2.0.0
+      vue: 3.3.4
     dev: true
 
   /@intlify/core-base@9.7.0:
@@ -1795,6 +1810,10 @@ packages:
       typed-array-length: 1.0.4
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.13
+    dev: true
+
+  /es-module-lexer@1.4.1:
+    resolution: {integrity: sha512-cXLGjP0c4T3flZJKQSuziYoq7MlT+rnvfZjfp7h+I7K9BNX54kP9nyWvdbwjQ4u1iWbOL4u96fgeZLToQlZC7w==}
     dev: true
 
   /es-set-tostringtag@2.0.2:
@@ -3903,6 +3922,18 @@ packages:
       magic-string: 0.30.5
       minimatch: 9.0.3
       unimport: 3.5.0
+      unplugin: 1.5.0
+    transitivePeerDependencies:
+      - rollup
+    dev: true
+
+  /unplugin-element-plus@0.8.0:
+    resolution: {integrity: sha512-jByUGY3FG2B8RJKFryqxx4eNtSTj+Hjlo8edcOdJymewndDQjThZ1pRUQHRjQsbKhTV2jEctJV7t7RJ405UL4g==}
+    engines: {node: '>=14.19.0'}
+    dependencies:
+      '@rollup/pluginutils': 5.0.5
+      es-module-lexer: 1.4.1
+      magic-string: 0.30.5
       unplugin: 1.5.0
     transitivePeerDependencies:
       - rollup
