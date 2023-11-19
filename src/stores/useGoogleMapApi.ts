@@ -5,7 +5,7 @@ const loader = new Loader({
   apiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
   version: 'weekly',
   libraries: ['places'],
-  language: 'zh-TW'
+  language: 'zh-TW',
 })
 
 let mapsApi: google.maps.MapsLibrary | null = null

@@ -28,4 +28,7 @@ module.exports = {
     'uno.config.ts',
     'vite.config.ts'
   ],
+  rules: {
+    'comma-dangle': ["error", "always-multiline"]
+  }
 }

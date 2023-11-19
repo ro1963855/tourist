@@ -15,7 +15,7 @@ export const getMarkers = async (): Promise<{data: Marker[]}> => {
       { id: 6, lat: 25.1623, lng: 121.4922 },
       { id: 7, lat: 25.0013, lng: 121.5122 },
       { id: 7, lat: 25.0001, lng: 121.5091 },
-      { id: 8, lat: 25.1283, lng: 121.5471 }
-    ]
+      { id: 8, lat: 25.1283, lng: 121.5471 },
+    ],
   }
 }

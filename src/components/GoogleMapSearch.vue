@@ -20,7 +20,7 @@ const search = () => {
   if (searchQuery.value === '') { return }
 
   const request = {
-    query: searchQuery.value
+    query: searchQuery.value,
   }
 
   placesService.textSearch(request, (results, status) => {
@@ -34,7 +34,7 @@ const search = () => {
           marker.geometry?.location?.lat() ?? 0,
           marker.geometry?.location?.lng() ?? 0,
           marker.rating ?? 0,
-          marker.user_ratings_total ?? 0
+          marker.user_ratings_total ?? 0,
         )
       })
 
@@ -66,7 +66,7 @@ const search = () => {
   @apply w-full;
 
   .search-button {
-    @apply text-gray-500 hover:text-gray-700 active:text-gray-900 ;
+    @apply text-primary-black hover:text-gray-700 active:text-gray-900 ;
   }
 }
 </style>

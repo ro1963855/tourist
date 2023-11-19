@@ -26,13 +26,13 @@ const initMap = async () => {
   const mapOptions = {
     center: {
       lat: 25.0425,
-      lng: 121.5468
+      lng: 121.5468,
     },
     zoom: 11,
     mapTypeId: mapApi.MapTypeId.ROADMAP,
     streetViewControl: false,
     mapTypeControl: false,
-    fullscreenControl: false
+    fullscreenControl: false,
   }
 
   try {
@@ -54,7 +54,7 @@ const addMarker = (marker: Marker) => {
   }
 
   const mapMarker = new markerApi.Marker({
-    position: { lat: marker.lat, lng: marker.lng }
+    position: { lat: marker.lat, lng: marker.lng },
   })
   mapMarker.setMap(props.map)
 }

@@ -58,7 +58,7 @@ export const defaultI18n = setupI18n({
   locale: 'zh-TW',
   fallbackLocale: 'zh-TW',
   globalInjection: true,
-  messages: {}
+  messages: {},
 })
 
 export default defaultI18n

@@ -3,9 +3,16 @@ import type { Ref } from 'vue'
 import { ref } from 'vue'
 import GoogleMap from '@/components/GoogleMap.vue'
 import GoogleMapSearch from '@/components/GoogleMapSearch.vue'
+import BottomControlDrawer from '@/components/BottomControlDrawer.vue'
+import SearchList from '@/components/SearchList.vue'
 import { SearchResult } from '@/models/SearchResult'
 const map: Ref<google.maps.Map | null> = ref(null)
+import { getMockSearchResultsData } from '@/models/searchMockData'
 const searchResults: Ref<SearchResult[]> = ref([])
+const isShowPanel = ref(true)
+
+// Mock
+searchResults.value = getMockSearchResultsData()
 </script>
 
 <template>
@@ -24,6 +31,10 @@ const searchResults: Ref<SearchResult[]> = ref([])
         ></GoogleMapSearch>
       </Suspense>
     </div>
+
+    <BottomControlDrawer v-model="isShowPanel">
+      <SearchList :searchResults="searchResults"></SearchList>
+    </BottomControlDrawer>
   </div>
 </template>
 

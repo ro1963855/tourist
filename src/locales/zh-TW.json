@@ -1,3 +1,7 @@
 {
-  "GoogleMapSearch.input.placeholder": "輸入地點名稱"
+  "GoogleMapSearch.input.placeholder": "輸入地點名稱",
+  "SearchList.empty": "無搜尋結果",
+  "SearchResultCard.actions.detail": "詳細",
+  "SearchResultCard.actions.add": "新增",
+  "SearchResultCard.actions.remove": "移除"
 }
