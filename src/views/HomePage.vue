@@ -9,7 +9,6 @@ import { SearchResult } from '@/models/SearchResult'
 const map: Ref<google.maps.Map | null> = ref(null)
 import { getMockSearchResultsData } from '@/models/searchMockData'
 const searchResults: Ref<SearchResult[]> = ref([])
-const isShowPanel = ref(true)
 
 // Mock
 searchResults.value = getMockSearchResultsData()
@@ -32,7 +31,7 @@ searchResults.value = getMockSearchResultsData()
       </Suspense>
     </div>
 
-    <BottomControlDrawer v-model="isShowPanel">
+    <BottomControlDrawer>
       <SearchList :searchResults="searchResults"></SearchList>
     </BottomControlDrawer>
   </div>
