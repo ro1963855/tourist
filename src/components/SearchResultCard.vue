@@ -8,23 +8,23 @@ defineProps<{
   isSave: boolean
 }>()
 
-const StarType = {
-  Full: 'Full',
-  Half: 'Half',
-  Empty: 'Empty',
+const STAR_TYPE = {
+  FULL: 'FULL',
+  HALF: 'HALF',
+  EMPTY: 'EMPTY',
 } as const
 
 const starType = (rating: number, startIndex: number) => {
   const difference = rating - startIndex
   if (difference >= 0) {
-    return StarType.Full
+    return STAR_TYPE.FULL
   }
 
   if (difference >= -0.5) {
-    return StarType.Half
+    return STAR_TYPE.HALF
   }
 
-  return StarType.Empty
+  return STAR_TYPE.EMPTY
 }
 </script>
 
@@ -47,10 +47,10 @@ const starType = (rating: number, startIndex: number) => {
       <div class="marker-rating mb-2">
         <span class="mr-2">{{ searchResult.rating }}</span>
         <span v-for="index in 5" :key="index" class="rating-star">
-          <template v-if="starType(searchResult.rating, index + 1) === StarType.Full">
+          <template v-if="starType(searchResult.rating, index + 1) === STAR_TYPE.FULL">
             <Icon class="text-warning" icon="material-symbols:star-rate-rounded"></Icon>
           </template>
-          <template v-else-if="starType(searchResult.rating, index + 1) === StarType.Half">
+          <template v-else-if="starType(searchResult.rating, index + 1) === STAR_TYPE.HALF">
             <Icon class="text-warning" icon="material-symbols:star-rate-half-rounded"></Icon>
           </template>
           <template v-else>

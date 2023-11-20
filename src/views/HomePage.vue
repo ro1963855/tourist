@@ -5,9 +5,11 @@ import GoogleMap from '@/components/GoogleMap.vue'
 import GoogleMapSearch from '@/components/GoogleMapSearch.vue'
 import BottomControlDrawer from '@/components/BottomControlDrawer.vue'
 import SearchList from '@/components/SearchList.vue'
+import ControlTabs from '@/components/ControlTabs.vue'
 import { SearchResult } from '@/models/SearchResult'
-const map: Ref<google.maps.Map | null> = ref(null)
 import { getMockSearchResultsData } from '@/models/searchMockData'
+
+const map: Ref<google.maps.Map | null> = ref(null)
 const searchResults: Ref<SearchResult[]> = ref([])
 
 // Mock
@@ -32,7 +34,12 @@ searchResults.value = getMockSearchResultsData()
     </div>
 
     <BottomControlDrawer>
-      <SearchList :searchResults="searchResults"></SearchList>
+      <ControlTabs>
+        <template #LIST></template>
+        <template #SEARCH>
+          <SearchList :searchResults="searchResults"></SearchList>
+        </template>
+      </ControlTabs>
     </BottomControlDrawer>
   </div>
 </template>

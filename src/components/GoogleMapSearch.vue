@@ -66,7 +66,7 @@ const search = () => {
   @apply w-full;
 
   .search-button {
-    @apply text-primary-black hover:text-gray-700 active:text-gray-900 ;
+    @apply text-primary-black hover:text-gray-700 active:text-gray-900;
   }
 }
 </style>

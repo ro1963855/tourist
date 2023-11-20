@@ -41,6 +41,8 @@ const size = computed(() => {
 
   .el-drawer__body {
     @apply p-0;
+    @apply flex flex-col;
+    @apply overflow-hidden;
   }
 }
 </style>
@@ -50,6 +52,9 @@ const size = computed(() => {
     @apply h-6 w-full;
     @apply flex items-center justify-center;
     @apply cursor-pointer;
+    @apply overflow-hidden;
+
+    flex: 0 0 auto;
 
     &:hover {
       .expand-bar {

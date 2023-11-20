@@ -40,6 +40,5 @@ const isSearchEmpty = computed(() => props.searchResults.length === 0)
 
 .search-list {
   @apply bg-gray-100 space-y-4;
-  @apply overflow-auto h-full;
 }
 </style>
