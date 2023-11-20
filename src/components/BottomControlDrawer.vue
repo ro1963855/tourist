@@ -35,6 +35,8 @@ const size = computed(() => {
 
 <style lang="scss">
 .bottom-control-drawer {
+  position: static !important;
+
   .el-drawer {
     @apply rounded-t-3xl;
   }
