@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { ElImage, ElButton } from 'element-plus'
 import { Icon } from '@iconify/vue'
 import { SearchResult } from '@/models/SearchResult'
 
-defineProps<{
+const props = defineProps<{
   searchResult: SearchResult
   isSave: boolean
 }>()
@@ -14,18 +15,28 @@ const STAR_TYPE = {
   EMPTY: 'EMPTY',
 } as const
 
-const starType = (rating: number, startIndex: number) => {
-  const difference = rating - startIndex
-  if (difference >= 0) {
-    return STAR_TYPE.FULL
-  }
+const displayStarIcon = computed(() => {
+  return Array.from({ length: 5 }).map((_, index) => {
+    const difference = props.searchResult.rating - index - 1
+    if (difference >= 0) {
+      return STAR_TYPE.FULL
+    }
 
-  if (difference >= -0.5) {
-    return STAR_TYPE.HALF
-  }
+    if (difference >= -0.5) {
+      return STAR_TYPE.HALF
+    }
 
-  return STAR_TYPE.EMPTY
-}
+    return STAR_TYPE.EMPTY
+  })
+})
+
+const googleMapUrl = computed(() => {
+  const googleMapDomain = 'https://www.google.com'
+  const placePath = '/maps/place'
+  const googleMapUrl = new URL(placePath, googleMapDomain)
+  googleMapUrl.searchParams.append('q', `place_id:${props.searchResult.placeId}`)
+  return googleMapUrl.href
+})
 </script>
 
 <template>
@@ -46,11 +57,15 @@ const starType = (rating: number, startIndex: number) => {
       <div class="marker-name">{{ searchResult.name }}</div>
       <div class="marker-rating mb-2">
         <span class="mr-2">{{ searchResult.rating }}</span>
-        <span v-for="index in 5" :key="index" class="rating-star">
-          <template v-if="starType(searchResult.rating, index + 1) === STAR_TYPE.FULL">
+        <span
+          v-for="(startType, index) in displayStarIcon"
+          :key="index"
+          class="rating-star"
+        >
+          <template v-if="startType === STAR_TYPE.FULL">
             <Icon class="text-warning" icon="material-symbols:star-rate-rounded"></Icon>
           </template>
-          <template v-else-if="starType(searchResult.rating, index + 1) === STAR_TYPE.HALF">
+          <template v-else-if="startType === STAR_TYPE.HALF">
             <Icon class="text-warning" icon="material-symbols:star-rate-half-rounded"></Icon>
           </template>
           <template v-else>
@@ -61,8 +76,10 @@ const starType = (rating: number, startIndex: number) => {
       </div>
       <div class="actions">
         <ElButton type="primary" plain>
-          <Icon class="mr-1" icon="material-symbols:visibility-rounded"></Icon>
-          <span>{{ $t('SearchResultCard.actions.detail') }}</span>
+          <a class="flex" :href="googleMapUrl" target="_blank">
+            <Icon class="mr-1" icon="material-symbols:visibility-rounded"></Icon>
+            <span>{{ $t('SearchResultCard.actions.detail') }}</span>
+          </a>
         </ElButton>
 
         <ElButton v-if="!isSave" type="danger" plain>
