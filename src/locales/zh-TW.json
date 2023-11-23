@@ -3,5 +3,12 @@
   "SearchList.empty": "無搜尋結果",
   "SearchResultCard.actions.detail": "詳細",
   "SearchResultCard.actions.add": "新增",
-  "SearchResultCard.actions.remove": "移除"
+  "SearchResultCard.actions.remove": "移除",
+  "TripList.actions.create_trip": "開啟旅程",
+  "CreateTripDialog.header_trip_name": "開啟旅程",
+  "CreateTripDialog.form.trip_name_label": "旅程名稱",
+  "CreateTripDialog.form.trip_name_required": "旅程名稱為必填",
+  "CreateTripDialog.actions.cancel": "取消",
+  "CreateTripDialog.actions.save": "儲存",
+  "TripCard.create_at": "建立時間："
 }

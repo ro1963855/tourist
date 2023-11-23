@@ -11,6 +11,8 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.2",
     "@unocss/reset": "^0.57.3",
+    "axios": "^1.6.2",
+    "date-fns": "^2.30.0",
     "element-plus": "^2.4.2",
     "lodash-es": "^4.17.21",
     "vue": "^3.3.4",
