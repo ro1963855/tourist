@@ -38,8 +38,8 @@ const initMap = async () => {
   try {
     const map = new mapApi.Map(mapEl.value, mapOptions)
     emit('update:map', map)
-  } catch (e) {
-    console.error(e)
+  } catch (err) {
+    console.error(err)
   }
 }
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Ref } from 'vue'
+import type { ValuesType } from 'utility-types'
 import { ref } from 'vue'
 import { ElTabs, ElTabPane } from 'element-plus'
 import { Icon } from '@iconify/vue'
@@ -7,8 +9,15 @@ const TABS_NAME = {
   LIST: 'LIST',
   SEARCH: 'SEARCH',
 } as const
+type TABS_NAME_TYPE = ValuesType<typeof TABS_NAME>
 
-const activeName = ref(TABS_NAME.LIST)
+const activeName: Ref<TABS_NAME_TYPE> = ref(TABS_NAME.LIST)
+
+const changeTab = (tabName: TABS_NAME_TYPE) => {
+  activeName.value = tabName
+}
+
+defineExpose({ changeTab })
 </script>
 
 <template>
@@ -52,6 +61,12 @@ const activeName = ref(TABS_NAME.LIST)
 
   :deep(.el-tabs__content) {
     @apply overflow-auto;
+
+    flex: 1 1 100%;
+  }
+
+  :deep(.el-tab-pane) {
+    @apply h-full w-full;
   }
 }
 </style>

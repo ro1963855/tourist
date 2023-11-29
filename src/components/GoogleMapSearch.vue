@@ -10,7 +10,7 @@ const props = defineProps<{
   searchResults: SearchResult[]
 }>()
 
-const emit = defineEmits<{(e: 'update:searchResults', searchResults: SearchResult[]): void}>()
+const emit = defineEmits<{(e: 'search', searchResults: SearchResult[]): void}>()
 
 const placesApi = await getPlacesApiApi()
 const placesService = new placesApi.PlacesService(props.map)
@@ -38,7 +38,7 @@ const search = () => {
         )
       })
 
-      emit('update:searchResults', searchResults)
+      emit('search', searchResults)
     }
   })
 }

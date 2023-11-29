@@ -33,6 +33,8 @@ const isSearchEmpty = computed(() => props.searchResults.length === 0)
   @apply flex items-center justify-center;
   @apply w-full h-full;
 
+  flex: 1 1 100%;
+
   .empty-words {
     @apply text-4xl text-primary-black;
   }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
+import { useRouter } from 'vue-router'
 import type { Trip } from '@/apis/trip'
 import { ref, onBeforeMount } from 'vue'
 import { ElButton } from 'element-plus'
@@ -28,6 +29,11 @@ const handleTripCreated = async () => {
   await fetchTripList()
   closeCreateDialog()
 }
+
+const router = useRouter()
+const goToDetailPage = (tripId: number) => {
+  router.push({ name: 'TripDetail', params: { tripId } })
+}
 </script>
 
 <template>
@@ -44,6 +50,7 @@ const handleTripCreated = async () => {
         :id="trip.id"
         :trip-name="trip.tripName"
         :create-at="trip.createdAt"
+        @click="goToDetailPage(trip.id)"
       ></TripCard>
     </div>
   </div>
