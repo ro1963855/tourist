@@ -7,6 +7,7 @@ import { SearchResult } from '@/models/SearchResult'
 const props = defineProps<{
   searchResult: SearchResult
   isSave: boolean
+  isActive?: boolean
 }>()
 
 const STAR_TYPE = {
@@ -40,7 +41,7 @@ const googleMapUrl = computed(() => {
 </script>
 
 <template>
-  <div class="search-result-card">
+  <div class="search-result-card" :class="{'active': isActive}">
     <ElImage
       class="cover-image"
       :lazy="true"
@@ -99,6 +100,10 @@ const googleMapUrl = computed(() => {
   .search-result-card {
     @apply p-6 flex gap-x-2;
     @apply bg-white;
+
+    &.active {
+      @apply bg-gray-100;
+    }
 
     .cover-image {
       @apply flex-0 self-center w-30 h-30 rounded-2;

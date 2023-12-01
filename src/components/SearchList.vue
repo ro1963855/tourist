@@ -5,9 +5,30 @@ import { SearchResult } from '@/models/SearchResult'
 
 const props = defineProps<{
   searchResults: SearchResult[]
+  searchResultSelected: SearchResult | null
+}>()
+
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+  (e: 'searchResultMouseUp', searchResult: SearchResult): void;
 }>()
 
 const isSearchEmpty = computed(() => props.searchResults.length === 0)
+
+const focusSearchResultCard = (searchResult: SearchResult) => {
+  const cardEl = document.querySelector(`#card-${searchResult.placeId}`)
+  if (!cardEl) { return }
+  cardEl?.scrollIntoView({ behavior: 'smooth' })
+}
+
+const handleMouseUpSearchResult = (searchResult: SearchResult) => {
+  if (props.searchResultSelected?.placeId === searchResult.placeId) { return }
+  emit('searchResultMouseUp', searchResult)
+}
+
+defineExpose({
+  focusSearchResultCard,
+})
 </script>
 
 <template>
@@ -20,8 +41,11 @@ const isSearchEmpty = computed(() => props.searchResults.length === 0)
     <ul class="search-list">
       <li v-for="result in searchResults" :key="result.placeId">
         <SearchResultCard
+          :id="`card-${result.placeId}`"
           :search-result="result"
           :is-save="false"
+          :is-active="searchResultSelected?.placeId === result.placeId"
+          @mouseover="handleMouseUpSearchResult(result)"
         ></SearchResultCard>
       </li>
     </ul>
@@ -41,6 +65,7 @@ const isSearchEmpty = computed(() => props.searchResults.length === 0)
 }
 
 .search-list {
-  @apply bg-gray-100 space-y-4;
+  @apply bg-gray-200 space-y-4;
+  @apply overflow-auto h-full;
 }
 </style>

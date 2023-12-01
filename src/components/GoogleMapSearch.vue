@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Icon } from '@iconify/vue'
 import { ElInput, ElButton } from 'element-plus'
 import { getPlacesApiApi } from '@/stores/useGoogleMapApi'
@@ -42,6 +42,11 @@ const search = () => {
     }
   })
 }
+
+const isHaveSearchResults = computed(() => props.searchResults.length > 0)
+const clearSearchResults = () => {
+  emit('search', [])
+}
 </script>
 
 <template>
@@ -52,6 +57,19 @@ const search = () => {
       size="large"
       :placeholder="$t('GoogleMapSearch.input.placeholder')"
     >
+      <template #suffix v-if="isHaveSearchResults">
+        <ElButton
+          class="clear"
+          type="info"
+          size="small"
+          text
+          bg
+          @click="clearSearchResults"
+        >
+          <span class="mr-1">{{ "清除結果" }}</span>
+          <Icon icon="material-symbols:close-rounded" />
+        </ElButton>
+      </template>
       <template #append>
         <ElButton class="search-button" @click="search">
           <Icon icon="material-symbols:search" />
@@ -67,6 +85,14 @@ const search = () => {
 
   .search-button {
     @apply text-primary-black hover:text-gray-700 active:text-gray-900;
+  }
+
+  :deep(.el-input__wrapper) {
+    @apply relative;
+  }
+
+  .clear {
+    @apply absolute right-4 top-1/2 -translate-y-1/2 transform;
   }
 }
 </style>
