@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TripDetailLocation } from '@/apis/trip'
 import { computed } from 'vue'
 import SearchResultCard from '@/components/SearchResultCard.vue'
 import { SearchResult } from '@/models/SearchResult'
@@ -6,14 +7,30 @@ import { SearchResult } from '@/models/SearchResult'
 const props = defineProps<{
   searchResults: SearchResult[]
   searchResultSelected: SearchResult | null
+  tripLocations: TripDetailLocation[]
 }>()
 
 // eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
   (e: 'searchResultMouseUp', searchResult: SearchResult): void;
+  (e: 'bindLocation', searchResult: SearchResult): void;
+  (e: 'unbindLocation', searchResult: SearchResult): void;
 }>()
 
 const isSearchEmpty = computed(() => props.searchResults.length === 0)
+
+const tripLocationPlaceIDs = computed(() => {
+  return props.tripLocations.map((location) => location.placeID)
+})
+
+const normalizedSearchResults = computed(() => {
+  return props.searchResults.map((result) => {
+    return {
+      result,
+      isSave: tripLocationPlaceIDs.value.includes(result.placeId),
+    }
+  })
+})
 
 const focusSearchResultCard = (searchResult: SearchResult) => {
   const cardEl = document.querySelector(`#card-${searchResult.placeId}`)
@@ -24,6 +41,14 @@ const focusSearchResultCard = (searchResult: SearchResult) => {
 const handleMouseUpSearchResult = (searchResult: SearchResult) => {
   if (props.searchResultSelected?.placeId === searchResult.placeId) { return }
   emit('searchResultMouseUp', searchResult)
+}
+
+const bindLocation = async (searchResult: SearchResult) => {
+  emit('bindLocation', searchResult)
+}
+
+const unbindLocation = async (searchResult: SearchResult) => {
+  emit('unbindLocation', searchResult)
 }
 
 defineExpose({
@@ -39,13 +64,15 @@ defineExpose({
   </template>
   <template v-else>
     <ul class="search-list">
-      <li v-for="result in searchResults" :key="result.placeId">
+      <li v-for="normalizedResult in normalizedSearchResults" :key="normalizedResult.result.placeId">
         <SearchResultCard
-          :id="`card-${result.placeId}`"
-          :search-result="result"
-          :is-save="false"
-          :is-active="searchResultSelected?.placeId === result.placeId"
-          @mouseover="handleMouseUpSearchResult(result)"
+          :id="`card-${normalizedResult.result.placeId}`"
+          :search-result="normalizedResult.result"
+          :is-save="normalizedResult.isSave"
+          :is-active="searchResultSelected?.placeId === normalizedResult.result.placeId"
+          @mouseover="handleMouseUpSearchResult(normalizedResult.result)"
+          @bind-location="bindLocation"
+          @unbind-location="unbindLocation"
         ></SearchResultCard>
       </li>
     </ul>

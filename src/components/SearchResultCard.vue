@@ -10,6 +10,12 @@ const props = defineProps<{
   isActive?: boolean
 }>()
 
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+  (e: 'bindLocation', searchResult: SearchResult): void;
+  (e: 'unbindLocation', searchResult: SearchResult): void;
+}>()
+
 const STAR_TYPE = {
   FULL: 'FULL',
   HALF: 'HALF',
@@ -38,6 +44,14 @@ const googleMapUrl = computed(() => {
   googleMapUrl.searchParams.append('q', `place_id:${props.searchResult.placeId}`)
   return googleMapUrl.href
 })
+
+const bindLocation = async () => {
+  emit('bindLocation', props.searchResult)
+}
+
+const unbindLocation = async () => {
+  emit('unbindLocation', props.searchResult)
+}
 </script>
 
 <template>
@@ -76,18 +90,18 @@ const googleMapUrl = computed(() => {
         <span class="ml-2">{{ `(${searchResult.userRatingsTotal})` }}</span>
       </div>
       <div class="actions">
-        <ElButton type="primary" plain>
-          <a class="flex" :href="googleMapUrl" target="_blank">
+        <a :href="googleMapUrl" target="_blank">
+          <ElButton type="primary" plain>
             <Icon class="mr-1" icon="material-symbols:visibility-rounded"></Icon>
             <span>{{ $t('SearchResultCard.actions.detail') }}</span>
-          </a>
-        </ElButton>
+          </ElButton>
+        </a>
 
-        <ElButton v-if="!isSave" type="danger" plain>
+        <ElButton v-if="!isSave" type="danger" plain @click="bindLocation">
           <Icon class="mr-1" icon="material-symbols:favorite-outline"></Icon>
           <span>{{ $t('SearchResultCard.actions.add') }}</span>
         </ElButton>
-        <ElButton v-else type="danger">
+        <ElButton v-else type="danger" @click="unbindLocation">
           <Icon class="mr-1" icon="material-symbols:favorite"></Icon>
           <span>{{ $t('SearchResultCard.actions.remove') }}</span>
         </ElButton>
@@ -130,7 +144,7 @@ const googleMapUrl = computed(() => {
     }
 
     .actions {
-      @apply mt-auto;
+      @apply mt-auto space-x-2;
     }
   }
 </style>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import type { TripDetail } from '@/apis/trip'
-import { ref, onMounted, nextTick } from 'vue'
+import type { Location } from '@/apis/location'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { isAxiosError } from 'axios'
 import { isInteger } from 'lodash-es'
@@ -13,22 +14,46 @@ import ControlTabs from '@/components/ControlTabs.vue'
 import { SearchResult } from '@/models/SearchResult'
 import { getMockSearchResultsData } from '@/models/searchMockData'
 import { getTripDetail } from '@/apis/trip'
+import { bindLocationToTrip, unbindLocationFromTrip } from '@/apis/location'
 
 const map: Ref<google.maps.Map | null> = ref(null)
 
 const route = useRoute()
 const router = useRouter()
+
+const tripId = computed(() => {
+  const id = Number(route.params.tripId)
+  if (!isInteger(id) || id <= 0) {
+    return null
+  }
+
+  return id
+})
+
+// #region tripDetail
 const tripDetail: Ref<TripDetail | null> = ref(null)
 
+const tripLocations = computed(() => {
+  return tripDetail.value?.locations ?? []
+})
+
 onMounted(async () => {
-  const tripId = Number(route.params.tripId)
-  if (!isInteger(tripId) || tripId <= 0) {
+  if (tripId.value === null) {
     router.push({ name: 'NotFound' })
     return
   }
 
+  fetchTripDetail()
+})
+
+const fetchTripDetail = async () => {
+  if (tripId.value === null) {
+    console.error(new Error('tripId should not be null'))
+    return
+  }
+
   try {
-    tripDetail.value = await getTripDetail(tripId)
+    tripDetail.value = await getTripDetail(tripId.value)
   } catch (err) {
     if (isAxiosError(err) && err.response?.status === 404) {
       router.push({ name: 'NotFound' })
@@ -37,8 +62,56 @@ onMounted(async () => {
 
     console.error(err)
   }
-})
+}
 
+const bindLocation = async (searchResult: SearchResult) => {
+  if (tripId.value === null) {
+    console.error(new Error('tripId should not be null'))
+    return
+  }
+
+  try {
+    const location: Location = {
+      placeId: searchResult.placeId,
+      locationName: searchResult.name,
+      longitude: searchResult.lng,
+      latitude: searchResult.lat,
+      rating: searchResult.rating,
+      coverImageUrl: searchResult.coverUrl,
+      totalReviews: searchResult.userRatingsTotal,
+    }
+    await bindLocationToTrip(tripId.value, location)
+    await fetchTripDetail()
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const unbindLocation = async (searchResult: SearchResult) => {
+  if (tripId.value === null) {
+    console.error(new Error('tripId should not be null'))
+    return
+  }
+
+  const locationId = tripLocations.value.find((location) => {
+    return location.placeID === searchResult.placeId
+  }) ?? null
+
+  if (locationId === null) {
+    console.error(new Error('locationId should not be null'))
+    return
+  }
+
+  try {
+    await unbindLocationFromTrip(tripId.value, locationId.locationID)
+    await fetchTripDetail()
+  } catch (err) {
+    console.error(err)
+  }
+}
+// #endregion tripDetail
+
+// #region searchResult
 const controlTabEl: Ref<InstanceType<typeof ControlTabs> | null> = ref(null)
 const searchResults: Ref<SearchResult[]> = ref([])
 const searchResultSelected: Ref<SearchResult | null> = ref(null)
@@ -82,6 +155,7 @@ const scrollSearchListToSearchResultCard = (searchResult: SearchResult) => {
 const selectedSearchResult = (searchResult: SearchResult) => {
   searchResultSelected.value = searchResult
 }
+// #endregion searchResult
 </script>
 
 <template>
@@ -113,10 +187,14 @@ const selectedSearchResult = (searchResult: SearchResult) => {
         <template #LIST></template>
         <template #SEARCH>
           <SearchList
+            v-if="tripId"
             ref="searchListEl"
             :searchResults="searchResults"
             :searchResultSelected="searchResultSelected"
+            :trip-locations="tripLocations"
             @search-result-mouse-up="selectedSearchResult"
+            @bind-location="bindLocation"
+            @unbind-location="unbindLocation"
           ></SearchList>
         </template>
       </ControlTabs>

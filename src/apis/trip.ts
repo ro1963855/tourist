@@ -16,6 +16,7 @@ interface GetTripDetailResponse {
   TripName: string;
   Locations: {
     LocationID: number;
+    PlaceID: string;
     LocationName: string;
     Longitude: number;
     Latitude: number;
@@ -36,23 +37,28 @@ export interface Trip {
   createdAt: string;
 }
 
+export interface TripDetailLocationTag {
+  tagID: number;
+  tagName: string;
+  color: string;
+}
+
+export interface TripDetailLocation {
+  locationID: number;
+  placeID: string;
+  locationName: string;
+  longitude: number;
+  latitude: number;
+  rating: number;
+  coverImageURL: string;
+  totalReviews: number;
+  tags: TripDetailLocationTag[];
+}
+
 export interface TripDetail {
   id: number;
   tripName: string;
-  locations: {
-    locationID: number;
-    locationName: string;
-    longitude: number;
-    latitude: number;
-    rating: number;
-    coverImageURL: string;
-    totalReviews: number;
-    tags: {
-      tagID: number;
-      tagName: string;
-      color: string;
-    }[];
-  }[];
+  locations: TripDetailLocation[];
 }
 
 export const getTrips = async () => {
@@ -65,7 +71,10 @@ export const getTrips = async () => {
 }
 
 export const createTrip = async (tripName: string) => {
-  const response: AxiosResponse<CreateTripResponse> = await defaultAxios.post('/api/v1/trips', { tripName })
+  const response: AxiosResponse<CreateTripResponse> = await defaultAxios.post(
+    '/api/v1/trips',
+    { tripName },
+  )
   return { tripID: response.data.TripID }
 }
 
@@ -76,6 +85,7 @@ export const getTripDetail = async (tripId: number) => {
     id: response.data.ID,
     tripName: response.data.TripName,
     locations: response.data.Locations.map((location) => ({
+      placeID: location.PlaceID,
       locationID: location.LocationID,
       locationName: location.LocationName,
       longitude: location.Longitude,
